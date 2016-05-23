@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Splat;
+
 namespace ReactiveGitHubClient
 {
     using System.Windows;
@@ -21,7 +23,7 @@ namespace ReactiveGitHubClient
         /// </summary>
         public App()
         {
-            RxApp.MutableResolver.Register(() => new LoginView(), typeof(IViewFor<LoginViewModel>));
+            Locator.CurrentMutable.Register(() => new LoginView(), typeof(IViewFor<LoginViewModel>));
         }
     }
 }

@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Threading.Tasks;
+
 namespace ReactiveGitHubClient.ViewModels
 {
     using ReactiveUI;
@@ -28,15 +30,16 @@ namespace ReactiveGitHubClient.ViewModels
         /// </summary>
         public LoginViewModel()
         {
-            // The login command is only enabled when both a user name and password have been 
+            // The login command is only enabled when both a user name and password have been
             // entered.
-            this.LoginCommand = new ReactiveCommand(
+            var canLogin =
                 this.WhenAny(
                     x => x.UserName,
                     x => x.Password,
-                    (userName, password) => 
-                        !string.IsNullOrWhiteSpace(userName.Value) && 
-                        !string.IsNullOrWhiteSpace(password.Value)));
+                    (userName, password) =>
+                        !string.IsNullOrWhiteSpace(userName.Value) &&
+                        !string.IsNullOrWhiteSpace(password.Value));
+            this.LoginCommand = ReactiveCommand.CreateAsyncTask(canLogin, o => new Task<bool>(() => true));
         }
 
         /// <summary>
@@ -60,7 +63,7 @@ namespace ReactiveGitHubClient.ViewModels
         /// <summary>
         /// Gets the command executed when the user clicks the "OK" button.
         /// </summary>
-        public ReactiveCommand LoginCommand
+        public ReactiveCommand<bool> LoginCommand
         {
             get;
             private set;
